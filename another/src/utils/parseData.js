@@ -1,11 +1,14 @@
 module.exports = async function parseData(promisesArray) {
-    const productsArray = await Promise.all(promisesArray).then(values => values.filter(element => typeof element !== 'string').flat());
-
-    const filteredProducts = productsArray.map(({ name, url, thumbnail, priceData: { value: price } }) => ({
-        name,
-        url,
-        thumbnail,
-        price
-    }));
-    return filteredProducts;
+    try {
+        const productsArray = await Promise.all(promisesArray)
+        const productsTidy = productsArray.filter(element => typeof element !== 'string').flat();
+        return productsTidy.map(({ name, url, thumbnail, priceData: { value: price } }) => ({
+            name,
+            url,
+            thumbnail,
+            price
+        }));
+    } catch (error) {
+        console.log(error);
+    }
 }
