@@ -2,29 +2,38 @@ const axios = require('axios');
 
 const URL_LIST = require('./config');
 
-/**
- * URLs to fetch:
- * https://pastebin.com/raw/xnU3bRvH
- * https://pastebin.com/raw/StjwkCib
- * https://pastebin.com/raw/RUcap17D
- * https://pastebin.com/raw/fKt6beV2
- * https://pastebin.com/raw/ajRSf4FF
- *
- * The function should return Array only.
- */
-function fetchURLList() {
-  return [
-    {
-      name: 'product name',
-      url: '/test/123',
-      price: 10,
-      thumbnail: 'https://thumb_url/123.jpg'
+async function fetchURLList() {
+
+    async function geData(url) {
+        const promise = await axios.get(url);
+        return promise.data;
     }
-  ];
+
+    async function parseData(){
+        const promisesArray = URL_LIST.map(url => geData(url));
+
+        const productsArray = await Promise.all(promisesArray).then(values => values.filter(element => typeof element !== 'string').flat());
+        const filteredProducts = productsArray.map(product => {
+            product.price = product.priceData.value;
+            product.url = product.url;
+            delete product.stock;
+            delete product.priceData;
+            delete product.slug;
+            delete product.isSale;
+            delete product.discountMessage;
+            delete product.isOneSize;
+            return product;
+        })
+    
+        return filteredProducts;
+
+    }
+
+return await parseData();
+
 }
 
-console.log(fetchURLList());
 
 module.exports = {
-  fetchURLList
+    fetchURLList
 };
