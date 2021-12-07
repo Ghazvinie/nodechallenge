@@ -1,0 +1,21 @@
+{
+    "name": "matchesfashion-tech-test",
+    "version": "1.0.0",
+    "description": "Matches Fashion technical test",
+    "engines": {
+      "node": "10.x"
+    },
+    "main": "index.js",
+    "scripts": {
+      "start": "node src/index.js",
+      "test": "mocha src/test/*.test.js"
+    },
+    "license": "ISC",
+    "devDependencies": {
+      "chai": "^4.2.0",
+      "mocha": "^7.0.0"
+    },
+    "dependencies": {
+      "axios": "^0.19.1"
+    }
+  }
